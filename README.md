@@ -1,12 +1,10 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 ### 技术栈
-框架：react
-脚手架： react-create-app
-组件库： antd
-css预处理器： sass
-路由： react-router-dom
-ajax插件：axios
+框架：react<br />
+脚手架： react-create-app<br />
+组件库： antd<br />
+css预处理器： sass<br />
+路由： react-router-dom<br />
+ajax插件：axios<br />
 
 ## Available Scripts
 
