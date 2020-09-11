@@ -1,0 +1,20 @@
+.notFound-main{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .title{
+    font-size: 32px;
+    font-size: 700;
+    margin-top: 30px;
+  }
+  .des{
+    font-size: 20px;
+  }
+}
