@@ -1,4 +1,5 @@
 import React, {Component, lazy} from "react";
+import { withRouter } from 'react-router-dom'; //withRouter高阶组件：提供路由配置history/location/match
 import { Layout, Breadcrumb } from 'antd';
 import { axios } from "@/utils/axios";
 import {getCookie} from '../utils/cookieUtil'
@@ -7,7 +8,7 @@ const HegHeader = lazy(()=>import('@/components/header/header'))
 const HegMenu = lazy(()=>import('@/components/menu/menu'))
 require('./app.scss')
 const { Content, Sider } = Layout;
-export default class HegLayout extends Component {
+class HegLayout extends Component {
   constructor(props){
     super(props);
     this.state={
@@ -47,6 +48,7 @@ export default class HegLayout extends Component {
     // 获取菜单数据
     this.getMenuDataHandle();
   }
+
   componentDidUpdate(){
     // 路由拦截处理
     const {history, location, routeConfig} = this.props;
@@ -90,3 +92,4 @@ export default class HegLayout extends Component {
     )
   }
 }
+export default withRouter(HegLayout)

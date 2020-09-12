@@ -5,31 +5,25 @@ import HegLoading from "./components/loading/loading"
 const loginComponent = lazy (() => import('./pages/login/login')); 
 let HegLayout = lazy(() => import("./pages/app"));
 export default class HegRoute extends Component{
-  // routerMapHandle(){
-  //   routes.map((item, index) => {
-  //     const DynamicComponent= lazy(() => import(`${item.component}`))
-  //     return <Route path={item.path} key={index} component={DynamicComponent}></Route>
-  //   })
-  // }
+  routerMapHandle= ()=> {
+    return routes.map((item, index) => {
+      const DynamicComponent= lazy(() => import(`${item.component}`))
+      return <Route exact path={item.path} key={index} component={DynamicComponent}></Route>
+    })
+  }
   render(){
     return (
       <Router>
         <Suspense fallback={<HegLoading></HegLoading>}>
           <Switch>
             <Route exact path="/login" component={loginComponent}></Route>
-            <Route path="/" render={({history,location,match}) => {
-              return (
-                <HegLayout history={history} location={location} match={location} routeConfig={routes}>
+            <HegLayout path="/" routeConfig={routes}>
+              <Switch>
                   { 
-                    routes.map((item, index) => {
-                      const DynamicComponent= lazy(() => import(`${item.component}`));
-                      return <Route path={item.path} key={index} component={DynamicComponent}></Route>
-                    })
+                    this.routerMapHandle()
                   }
-                </HegLayout>
-              )}
-            } /> 
-
+              </Switch>
+            </HegLayout>
           </Switch>
         </Suspense>
       </Router>
