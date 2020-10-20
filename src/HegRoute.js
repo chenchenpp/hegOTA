@@ -1,5 +1,5 @@
 import React, {Component, lazy, Suspense} from 'react'
-import {BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import routes from "./router/routerData"
 import HegLoading from "./components/loading/loading"
 const loginComponent = lazy (() => import('./pages/login/login')); 
@@ -22,6 +22,7 @@ export default class HegRoute extends Component{
                   { 
                     this.routerMapHandle()
                   }
+                  <Redirect to="/404" /> 
               </Switch>
             </HegLayout>
           </Switch>

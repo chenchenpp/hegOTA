@@ -59,10 +59,10 @@ class HegLayout extends Component {
       return false
     }
     // 判断是否有页面
-    if(!routeConfig.some(item=> item.path===location.pathname)){
-      window.location.replace('/404')
-      return
-    }
+    // if(!routeConfig.some(item=> item.path===location.pathname)){
+    //   window.location.replace('/404')
+    //   return
+    // }
   }
   render(){
     return (
