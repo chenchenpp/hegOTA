@@ -50,7 +50,7 @@ export default class RoleList extends Component{
   }
   goEditHandle = (record) => {
     this.props.history.push({
-      pathname: '/permission/role/main'+record.id,
+      pathname: '/permission/role/main/'+record.id,
     })
   }
   componentDidMount(){ 

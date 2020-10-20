@@ -45,7 +45,7 @@ export default class RoleList extends Component{
   }
   formRef = React.createRef();
   async componentDidMount(){
-    const { location }=this.props;
+    const { match }=this.props;
     try{
       const getDepartment= await getDepartmentList();
       this.setState({
@@ -54,9 +54,9 @@ export default class RoleList extends Component{
     }catch(err){
       console.log(err)
     }
-    if(location.query && location.query.id !== undefined){
+    if(match.params && match.params.id !== undefined){
       try {   
-        const getRoleInfoData = await getRoleInfo(location.query.id)
+        const getRoleInfoData = await getRoleInfo(match.params.id)
         const { roleName, roleDetail, status, departmentId } = getRoleInfoData
         this.formRef.current.setFieldsValue({ roleName, roleDetail, status, departmentId });
         // this.setState({roleName, roleDetail,status, departmentId})

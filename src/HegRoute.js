@@ -17,7 +17,7 @@ export default class HegRoute extends Component{
         <Suspense fallback={<HegLoading></HegLoading>}>
           <Switch>
             <Route exact path="/login" component={loginComponent}></Route>
-            <HegLayout path="/" routeConfig={routes}>
+            <HegLayout path="/">
               <Switch>
                   { 
                     this.routerMapHandle()
