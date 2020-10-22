@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { axios } from "@/utils/axios";
-import { Table, notification, Button, Card } from 'antd';
+import { Table, notification, Button, Card, Pagination } from 'antd';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 const { Column } = Table;
 export default class RoleList extends Component{
@@ -8,11 +8,13 @@ export default class RoleList extends Component{
     super(props);
     this.state={
       list: [],
+      departmentList: [],
       params: {
         pageIndex: 1,
         pageSize: 10,
         sortType: 'DESC'
-      }
+      },
+      totalPage: 0,
     }
   }
 
@@ -21,7 +23,6 @@ export default class RoleList extends Component{
       axios.get('/ota-api/permission/role', {
         params: this.state.params
       }).then(res=>{
-        console.log(res)
         if(res.code===200){
           resolve(res.data)
         } else {
@@ -58,13 +59,15 @@ export default class RoleList extends Component{
       let roleListData=res[0].content;
       let departmentList=res[1];
       roleListData.forEach(item=>{
-        let departmentItem=departmentList.find(data=>data.id==item.departmentId);
+        let departmentItem=departmentList.find(data=>data.id===item.departmentId);
         item.departmentName=departmentItem.departmentName;
         item.key=item.id
       })
       this.setState({
-        list: roleListData
-      })
+        departmentList,
+        list: roleListData,
+        totalPage: res[0].numberOfElements
+      });
     },(reject)=>{
       notification.error({
         message: reject.message,
@@ -72,7 +75,25 @@ export default class RoleList extends Component{
       });
     })
   }
+  // 
+  changePageHandle= (pagination) => {
+    let params={...this.state.params,...{pageIndex: pagination.current}}
+    this.setState({ params }, ()=>{
+      this.getList().then(res=>{
+        let roleListData=res.content;
+        roleListData.forEach(item=>{
+          let departmentItem=this.state.departmentList.find(data=>data.id===item.departmentId);
+          item.departmentName=departmentItem.departmentName;
+          item.key=item.id
+        })
+        this.setState({
+          list: roleListData,
+          totalPage: res.numberOfElements
+        });
+      })
+    })
   
+  }
   render() {
     return (
       <div>
@@ -81,7 +102,7 @@ export default class RoleList extends Component{
             Create
           </Button>
         </Card>
-        <Table dataSource={this.state.list}>
+        <Table dataSource={this.state.list} pagination={{ pageSize: this.state.params.pageSize, total: this.state.totalPage }} onChange={this.changePageHandle}>
           <Column title="Id" dataIndex="id" key="id" sorter={(a, b) => a.id - b.id} />
           <Column title="Department name" dataIndex="departmentName" key="departmentName" />
           <Column title="Role name" dataIndex="roleName" key="roleName" sorter={(a, b) => a.roleName.length - b.roleName.length} />
