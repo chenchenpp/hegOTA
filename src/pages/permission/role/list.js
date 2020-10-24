@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { axios } from "@/utils/axios";
-import { Table, notification, Button, Card, Pagination } from 'antd';
-import { EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { Table, notification, Button, Card, Pagination, message, Popconfirm  } from 'antd';
+import { EditOutlined, PlusOutlined, RestOutlined, QuestionCircleOutlined  } from '@ant-design/icons';
+import { rolePath } from '@/utils/httpUrl.config.js'
 const { Column } = Table;
 export default class RoleList extends Component{
   constructor(props){
@@ -20,7 +21,7 @@ export default class RoleList extends Component{
 
   getList=()=>{
     return new Promise((resolve, reject)=>{
-      axios.get('/ota-api/permission/role', {
+      axios.get(rolePath.createRolePath, {
         params: this.state.params
       }).then(res=>{
         if(res.code===200){
@@ -35,7 +36,7 @@ export default class RoleList extends Component{
   }
   getDepartment=()=>{
     return new Promise((resolve, reject)=>{
-      axios.get('/ota-api/permission/department').then(res=>{
+      axios.get(rolePath.department).then(res=>{
         if(res.code===200){
           resolve(res.data)
         } else {
@@ -44,14 +45,6 @@ export default class RoleList extends Component{
       }).catch(err=>{
         console.log(err)
       })
-    })
-  }
-  goCreateHandle = ()=>{
-    this.props.history.push('/permission/role/main')
-  }
-  goEditHandle = (record) => {
-    this.props.history.push({
-      pathname: '/permission/role/main/'+record.id,
     })
   }
   componentDidMount(){ 
@@ -75,9 +68,10 @@ export default class RoleList extends Component{
       });
     })
   }
-  // 
-  changePageHandle= (pagination) => {
-    let params={...this.state.params,...{pageIndex: pagination.current}}
+  // 翻页
+  changePageHandle= (pageIndex) => {
+    let params={...this.state.params, pageIndex}
+    // 改变分页参数后请求分页
     this.setState({ params }, ()=>{
       this.getList().then(res=>{
         let roleListData=res.content;
@@ -91,29 +85,55 @@ export default class RoleList extends Component{
           totalPage: res.numberOfElements
         });
       })
+    });
+  };
+  // 创建
+  goCreateHandle = ()=>{
+    this.props.history.push('/permission/role/main')
+  }
+  //跳转修改页
+  goEditHandle = (record) => {
+    this.props.history.push({
+      pathname: '/permission/role/main/'+record.id,
     })
-  
+  }
+  // 删除
+  deleteRoleHandle = (record) => {
+    axios.delete(`${rolePath.createRolePath}/${record.id}`).then(res=>{
+      console.log(res)
+      if(res.code===200){
+        message.success('删除成功!')
+        this.changePageHandle(this.state.params.pageIndex)
+      }
+    })
   }
   render() {
     return (
       <div>
         <Card style={{marginBottom: '10px'}}>
-          <Button type="primary" size='Small' icon={<PlusOutlined />} onClick={this.goCreateHandle}>
+          <Button type="primary" shape="round" size='Small' icon={<PlusOutlined />} onClick={this.goCreateHandle}>
             Create
           </Button>
         </Card>
-        <Table dataSource={this.state.list} pagination={{ pageSize: this.state.params.pageSize, total: this.state.totalPage }} onChange={this.changePageHandle}>
+        <Table dataSource={this.state.list} pagination={{ pageSize: this.state.params.pageSize, total: this.state.totalPage }} onChange={(pagination)=> this.changePageHandle(pagination.current)}>
           <Column title="Id" dataIndex="id" key="id" sorter={(a, b) => a.id - b.id} />
-          <Column title="Department name" dataIndex="departmentName" key="departmentName" />
-          <Column title="Role name" dataIndex="roleName" key="roleName" sorter={(a, b) => a.roleName.length - b.roleName.length} />
+          <Column title="Department" dataIndex="departmentName" key="departmentName" />
+          <Column title="Role" dataIndex="roleName" key="roleName" sorter={(a, b) => a.roleName.length - b.roleName.length} />
           <Column title="Role detail" dataIndex="roleDetail" key="roleDetail" 
                   sorter={(a, b) => a.roleDetail.length - b.roleDetail.length} />
           <Column title="Status" dataIndex="status" key="status" render={(text, record)=>{
             return text?'开':'关'
           }} />
-          <Column title="Action" render={(text, record)=>{
+          <Column title="Action" align="center" render={(text, record)=>{
             return (
-              <Button type="primary" size='Small' icon={<EditOutlined />} onClick={this.goEditHandle.bind(this,record)}> EDIT </Button>
+              <>
+                <EditOutlined style={{color: '#1890ff', fontSize: '20px'}} onClick={this.goEditHandle.bind(this,record)} /> 
+                <Popconfirm title="Are you sure delete this role?" icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                  onConfirm={ this.deleteRoleHandle.bind(this,record) }
+                  placement="left">
+                  <RestOutlined style={{color: 'red', fontSize: '20px', marginLeft: '10px'}}/>
+                </Popconfirm>
+              </>
             )
           }} />
         </Table>

@@ -8,11 +8,14 @@ class MenuTree extends Component {
     this.state={
       menuTree: [],
       expandedKeys: [],
+      checkedKeys: [],
       autoExpandParent: false,
       searchValue: ''
     }
   }
   componentDidMount(){
+    const {menuVos} = this.props;
+    
     // 获取菜单数据与渲染
     axios.get('/ota-api/permission/menu').then(res=>{
       if(res.code===200){
@@ -21,7 +24,6 @@ class MenuTree extends Component {
         let temp = {};
         for(let i in menuTreeList){
           let curItem=menuTreeList[i]
-          curItem.key=curItem.id;
           curItem.title=curItem.menuName
           temp[curItem.id] = curItem;
         }
@@ -46,7 +48,18 @@ class MenuTree extends Component {
       }
       
     })
-  }
+  };
+  // 静态方法 getDerivedStateFromProps  更新父组件传递过来的数据 return出去的是更新state 当state发生改变就会调用次函数
+  static getDerivedStateFromProps(props, state){
+    let {menuVos}=props
+    if(menuVos.length && state.menuTree.length){
+      let choicedKeys = menuVos.map(item=>{
+        return `${item.parentId}-${item.id}`
+      })
+      return {expandedKeys: choicedKeys, checkedKeys: choicedKeys}
+    }
+    return null
+  };
   // 获取筛选目录的id
   getParentId = (id, tree) => {
     let parentId;
@@ -94,7 +107,7 @@ class MenuTree extends Component {
   };
  
   render() {
-    const {expandedKeys, autoExpandParent, menuTree, searchValue}=this.state
+    const {expandedKeys,checkedKeys, autoExpandParent, menuTree, searchValue}=this.state
    
      // 匹配菜单选项
     const matchWordHandle= tree => {
@@ -113,9 +126,9 @@ class MenuTree extends Component {
             <span>{item.title}</span>
           ); 
         if (item.children) {
-          return {...item, ...{ title, key: item.key, children: matchWordHandle(item.children) }};
+          return {...item, ...{ title, key: `${item.parentId}-${item.id}`, children: matchWordHandle(item.children) }};
         }
-        return {...item, ...{ title, key: item.key }} 
+        return {...item, ...{ title, key: `${item.parentId}-${item.id}` }} 
       })
     }
     return (
@@ -125,6 +138,7 @@ class MenuTree extends Component {
           checkable
           onExpand={this.onExpand}
           expandedKeys={expandedKeys}
+          checkedKeys={checkedKeys}
           autoExpandParent={autoExpandParent}
           treeData={matchWordHandle(menuTree)}
           onCheck={this.props.getCheckedTreeHandle}

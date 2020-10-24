@@ -30,22 +30,22 @@ const getRoleInfo=function(id){
     })
   })
 }
-// const [form] = Form.useForm();
 export default class RoleList extends Component{
   constructor(props){
     super(props);
     this.state={
       roleName: '',
       roleDetail: '',
-      status: 0,
+      status: false,
       departmentId: 1,
       departmentList: [],
       menuVos: []
-    }
+    };
+    this.pageType= this.props.match.params&&this.props.match.params.id?'EDIT':'CREATE';
+    this.id=this.props.match.params&&this.props.match.params.id
   }
   formRef = React.createRef();
   async componentDidMount(){
-    const { match }=this.props;
     try{
       const getDepartment= await getDepartmentList();
       this.setState({
@@ -54,17 +54,17 @@ export default class RoleList extends Component{
     }catch(err){
       console.log(err)
     }
-    if(match.params && match.params.id !== undefined){
+    if(this.pageType==='EDIT'){
       try {   
-        const getRoleInfoData = await getRoleInfo(match.params.id)
-        const { roleName, roleDetail, status, departmentId } = getRoleInfoData
+        const getRoleInfoData = await getRoleInfo(this.id)
+        const { roleName, roleDetail, status, departmentId, menuVos } = getRoleInfoData
+        // 表单赋值
         this.formRef.current.setFieldsValue({ roleName, roleDetail, status, departmentId });
-        // this.setState({roleName, roleDetail,status, departmentId})
+        this.setState({menuVos})
       }catch(err){
         console.log(err)
       }
     }
-    
   }
    // 获取选中的菜单
   getCheckedTreeHandle= (checkedKeys, e)=>{
@@ -72,20 +72,34 @@ export default class RoleList extends Component{
       menuVos: e.checkedNodes
     })
   }
+  // 提交表单
   onFinish= values =>{
-    values.status=values.status?1:0;
-    const requestData = {...values}
-    console.log(requestData)
-    axios.post(rolePath.createRolePath, requestData).then(res=>{
+    const {history}=this.props;
+    let requestType={
+      CREATE: 'post',
+      EDIT: 'put'
+    }
+    let menuVos=this.state.menuVos.map(item=>{
+      return {id: item.id}
+    })
+    const requestData = {...values, menuVos}
+    if(this.id){
+      requestData.id=this.id
+      // requestData.operatorId= 0
+    }
+    const PATH = this.id ? `${rolePath.createRolePath}/${this.id}` : rolePath.createRolePath
+    axios[requestType[this.pageType]](PATH, requestData).then(res=>{
       console.log(res)
       if(res.code===200){
-        message.success('创建角色成功！')
+        let messageContext = this.pageType === 'CREATE' ? '创建角色成功！' : '修改成功'
+        message.success(messageContext)
+        history.go(-1);
       }
     })
   }
  
   render() {
-    const { roleName, roleDetail, status, departmentId } = this.state;
+    const { roleName, roleDetail, status, departmentId, menuVos } = this.state;
     return (
       <div className="role-create-main">
         <Form ref={this.formRef} wrapperCol= {{ span: 8 }} onFinish={this.onFinish} initialValues={{roleName, roleDetail, status, departmentId}}>
@@ -117,11 +131,11 @@ export default class RoleList extends Component{
               </Form.Item>
             </TabPane>
             <TabPane tab="MENUS" key="2">
-              <MenuTree getCheckedTreeHandle={this.getCheckedTreeHandle}></MenuTree>
+              <MenuTree getCheckedTreeHandle={this.getCheckedTreeHandle} menuVos={menuVos}></MenuTree>
             </TabPane>
           </Tabs>
           <Form.Item wrapperCol={{span: 4, offset: 10}}>
-            <Button type="primary" htmlType="submit" block>
+            <Button shape="round" type="primary" htmlType="submit" block>
               Submit
             </Button>
           </Form.Item>
