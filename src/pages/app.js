@@ -1,5 +1,5 @@
 import React, {Component, lazy} from "react";
-import { withRouter } from 'react-router-dom'; //withRouter高阶组件：提供路由配置history/location/match
+import { withRouter, Link } from 'react-router-dom'; //withRouter高阶组件：提供路由配置history/location/match
 import { Layout, Breadcrumb } from 'antd';
 import { axios } from "@/utils/axios";
 import {getCookie} from '../utils/cookieUtil'
@@ -42,16 +42,30 @@ class HegLayout extends Component {
     })
   }
   componentDidMount(){
-    const {location} = this.props;
-    let breadcrumbList=location.pathname.split('/').slice(1);
-    this.setState({breadcrumbArr: breadcrumbList}) //面包屑导航数据更新
     // 获取菜单数据
     this.getMenuDataHandle();
   }
-
-  componentDidUpdate(){
-    // 路由拦截处理
+  // 在此鈎子内使用setstate必须要包裹一层判断否则会报错
+  componentDidUpdate(prevProps){
+    //面包屑匹配
     const {history, location, routeConfig} = this.props;
+    if(prevProps.location.pathname!==location.pathname || this.state.breadcrumbArr.length===0){
+      let pathNameArr=location.pathname.split('/')
+      let breadcrumbList=pathNameArr.slice(1).map((item, index)=>{
+        if(index===0){
+          return {
+            name: 'dashBoard',
+            url: '/dashboard'
+          }
+        } 
+        return {
+          name: item,
+          url: pathNameArr.slice(0, index+2).join('/')
+        }
+      });
+      this.setState({breadcrumbArr: breadcrumbList}) //面包屑导航数据更新
+    }
+    // 拦截是否登入
     const token= getCookie('ota.session.id')
     if(!token){
       message.error('未登录, 请先登入');
@@ -79,7 +93,9 @@ class HegLayout extends Component {
             <Layout style={{ padding: '0 24px 24px' }}>
               <Breadcrumb style={{ margin: '16px 0' }}>
                 {this.state.breadcrumbArr.map((item, index)=>{
-                  return <Breadcrumb.Item key={index}>{item}</Breadcrumb.Item>
+                  return <Breadcrumb.Item key={index}>
+                          <Link to={item.url}> {item.name}</Link>
+                        </Breadcrumb.Item>
                 })}
               </Breadcrumb>
               <Content style={{minHeight: 280}}>
