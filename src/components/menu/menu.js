@@ -68,10 +68,9 @@ export default class HegMenu extends Component {
             if(item.subMenus&&item.subMenus.length){
               return (
                 <SubMenu key={`${item.parentId}-${item.id}`} icon={<UserOutlined />} title={item.menuName}>
-                  {`${item.parentId}-${item.id}`}
                   {item.subMenus.map(data => {
                     return (
-                      <Menu.Item key={`${data.parentId}-${data.id}`} link={data.menuUrl} isold={data.isOld.toString()}>{data.menuName} {`${data.parentId}-${data.id}`}</Menu.Item>
+                      <Menu.Item key={`${data.parentId}-${data.id}`} link={data.menuUrl} isold={data.isOld.toString()}>{data.menuName}</Menu.Item>
                     )
                   }
                   )}
@@ -80,7 +79,7 @@ export default class HegMenu extends Component {
             }else{
               return (
                 <Menu.Item key={`${item.parentId}-${item.id}`} icon={<UserOutlined />} link={item.menuUrl} isold={item.isOld.toString()}>
-                  {item.menuName} {`${item.parentId}-${item.id}`}
+                  {item.menuName}
                 </Menu.Item>
               )
             }
