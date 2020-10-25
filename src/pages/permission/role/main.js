@@ -136,7 +136,7 @@ export default class RoleList extends Component{
           </Tabs>
           <Form.Item wrapperCol={{span: 4, offset: 10}}>
             <Button shape="round" type="primary" htmlType="submit" block>
-              Submit
+              Save
             </Button>
           </Form.Item>
         </Form>
