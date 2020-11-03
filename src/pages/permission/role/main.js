@@ -6,7 +6,6 @@ import MenuTree from './components/menuTree.js'
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 const { Option } = Select;
-require('./create.scss')
 // 获取部门列表
 const getDepartmentList=function() {
   return new Promise((resolve, reject)=>{
@@ -101,7 +100,7 @@ export default class RoleList extends Component{
   render() {
     const { roleName, roleDetail, status, departmentId, menuVos } = this.state;
     return (
-      <div className="role-create-main">
+      <div className="role-create-main" style={{ background: '#ffffff',padding: '0 40px', paddingBottom: '40px'}}>
         <Form ref={this.formRef} wrapperCol= {{ span: 8 }} onFinish={this.onFinish} initialValues={{roleName, roleDetail, status, departmentId}}>
           <Tabs defaultActiveKey="1">
             <TabPane tab="NAME" key="1">

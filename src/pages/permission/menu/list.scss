@@ -1,0 +1,27 @@
+.ant-tree-list{
+  padding: 40px 30px;
+}
+.ant-tree-treenode{
+  height: 48px;
+  align-items: center!important;
+}
+.opare-add{
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  line-height: 48px;
+  margin-right: 20px;
+  &:active, &:hover{
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+}
+.opare-edit{
+  display: inline-block;
+  min-width: 64px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  &:active, &:hover{
+    background-color: rgba(1, 121, 89, 0.08);
+  }
+}

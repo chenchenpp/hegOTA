@@ -1,12 +1,13 @@
 import React, {Component} from "react";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { axios } from "@/utils/axios";
+import { loginModule } from '@/utils/httpUrl.config.js'
 import { setCookie } from "@/utils/cookieUtil";
 import { Form, Input, Button } from 'antd';
 require('./login.scss')
 export default class Login extends Component {
   onFinish = values => {
-    axios.post('/ota-api/login',values).then(res=>{
+    axios.post(loginModule.loginPath,values).then(res=>{
       if(res.code===200){
         const { token, username } = res.data;
         localStorage.setItem("token", token);

@@ -14,6 +14,9 @@ axios.interceptors.response.use(
       }, 1500)
     } else if(statusCode===400){
       message.error(`${statusCode}: ${statusText}`);
+    } else if(statusCode===403){
+      message.error('没有权限访问此页面！');
+      window.history.go(-1)
     }else {
       message.error(data.message);
     }

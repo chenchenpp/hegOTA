@@ -15,7 +15,14 @@ const routes = [
     component: './pages/permission/role/main.js',
     auth: true,
   }, {
-    path: '/permission/menu'
+    path: '/permission/menu',
+    name: 'menu',
+    component: './pages/permission/menu/list.js',
+    auth: true,
+  },{
+    path: '/permission/menu/main/:id?',
+    name: 'menuMain',
+    component: './pages/permission/menu/main.js'
   },{
     path: '/404',
     name: 'noFound',

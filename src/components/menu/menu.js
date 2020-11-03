@@ -50,7 +50,7 @@ export default class HegMenu extends Component {
   }
   // 监听菜单变化
   componentDidUpdate(preProps, perState){
-    if(preProps.menuList.length!=this.props.menuList.length){
+    if(preProps.menuList.length!==this.props.menuList.length){
       this.findMenuKeys(this.props.menuList)
     }
   }

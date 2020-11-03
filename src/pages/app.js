@@ -2,6 +2,7 @@ import React, {Component, lazy} from "react";
 import { withRouter, Link } from 'react-router-dom'; //withRouter高阶组件：提供路由配置history/location/match
 import { Layout, Breadcrumb } from 'antd';
 import { axios } from "@/utils/axios";
+import { basePath } from '@/utils/httpUrl.config.js'
 import {getCookie} from '../utils/cookieUtil'
 import { message } from 'antd';
 const HegHeader = lazy(()=>import('@/components/header/header'))
@@ -19,7 +20,7 @@ class HegLayout extends Component {
   // 获取菜单数据
   getMenuDataHandle=()=>{
     let token=localStorage.getItem('token')
-    axios.get('/ota-api/init',{
+    axios.get(basePath.initPath,{
       headers: { Authorization: token }
     }).then(res=>{
       if(res.code===200){

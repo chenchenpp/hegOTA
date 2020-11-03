@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { axios } from "@/utils/axios";
-import { Table, notification, Button, Card, Pagination, message, Popconfirm  } from 'antd';
+import { Table, notification, Button, Card, message, Popconfirm  } from 'antd';
 import { EditOutlined, PlusOutlined, RestOutlined, QuestionCircleOutlined  } from '@ant-design/icons';
 import { rolePath } from '@/utils/httpUrl.config.js'
 const { Column } = Table;

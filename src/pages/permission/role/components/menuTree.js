@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { axios } from "@/utils/axios";
 import { Tree, Input } from 'antd';
+import { menuAuthPath } from '@/utils/httpUrl.config.js'
+
 const { Search } = Input;
 class MenuTree extends Component {
   constructor(props){
@@ -13,11 +15,9 @@ class MenuTree extends Component {
       searchValue: ''
     }
   }
-  componentDidMount(){
-    const {menuVos} = this.props;
-    
+  componentDidMount(){    
     // 获取菜单数据与渲染
-    axios.get('/ota-api/permission/menu').then(res=>{
+    axios.get(menuAuthPath.menuPath).then(res=>{
       if(res.code===200){
         let menuTreeList= [...res.data]
         let menuData=[];
