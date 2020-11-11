@@ -18,3 +18,6 @@ export let rolePath={
 export let menuAuthPath = {
   menuPath: addBaseUrl('/permission/menu')//菜单-查询
 }
+export let otherPath={
+  farRegistered: addBaseUrl('/fare/registered'),
+}

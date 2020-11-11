@@ -9,7 +9,7 @@ function MenuMain(props){
     wrapperCol: { span: 8 },
   };
   const saveHandle=()=>{
-    props.changeMenuList();
+    changeMenuListAsync();
     console.log(props, props.dispatch)
   }
   return (
@@ -51,9 +51,5 @@ const mapStateToProps = (state) => ({
   state
 })
 // 处理事件
-const mapDispatchToProps = (dispatch) => {
-  return {
-    changeMenuList: () => dispatch(changeMenuListAsync())
-  };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(MenuMain)
+
+export default connect(mapStateToProps)(MenuMain)

@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.ota-container{
+  background: #ffffff;
+  padding: 0 40px; 
+  padding-bottom: 40px
+}

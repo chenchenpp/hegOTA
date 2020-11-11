@@ -18,7 +18,7 @@ class list extends Component {
       let menuData=[];
       let temp = {};
       for(let i in menuTreeList){
-        let curItem=menuTreeList[i]
+        let curItem={...menuTreeList[i]}
         curItem.title=curItem.menuName;
         curItem.key= `${curItem.parentId}-${curItem.id}`
         temp[curItem.id] = curItem;

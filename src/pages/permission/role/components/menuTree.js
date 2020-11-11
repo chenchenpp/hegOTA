@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { axios } from "@/utils/axios";
 import { Tree, Input } from 'antd';
-import { menuAuthPath } from '@/utils/httpUrl.config.js'
-
+import { connect } from 'react-redux'
+import {changeMenuListAsync} from '@/store/actions'
 const { Search } = Input;
 class MenuTree extends Component {
   constructor(props){
@@ -17,46 +16,47 @@ class MenuTree extends Component {
   }
   componentDidMount(){    
     // 获取菜单数据与渲染
-    axios.get(menuAuthPath.menuPath).then(res=>{
-      if(res.code===200){
-        let menuTreeList= [...res.data]
-        let menuData=[];
-        let temp = {};
-        for(let i in menuTreeList){
-          let curItem=menuTreeList[i]
-          curItem.title=curItem.menuName
-          temp[curItem.id] = curItem;
-        }
-        for(let i in temp){
-          let parentNode=temp[temp[i].parentId];
-          // 当前节点有父级
-          if(parentNode&&temp[i].parentId) {
-            if(!parentNode.children) {
-              parentNode.children = [];
-            }
-            parentNode.subMenus.push(temp[i]);
-            parentNode.children.push(temp[i]);
-          } else {
-            // 无父级
-            temp[i].parentId===0 && menuData.push(temp[i]);
-          }
-        }
-        this.setState({
-          menuTree: menuData,
-          autoExpandParent: true
-        })
+    this.props.getMenuData().then(()=>{
+      let menuTreeList= [...this.props.state.MenuData]
+      let menuData=[];
+      let temp = {};
+      for(let i in menuTreeList){
+        let curItem=menuTreeList[i]
+        curItem.title=curItem.menuName
+        temp[curItem.id] = curItem;
       }
-      
+      for(let i in temp){
+        let parentNode=temp[temp[i].parentId];
+        // 当前节点有父级
+        if(parentNode&&temp[i].parentId) {
+          if(!parentNode.children) {
+            parentNode.children = [];
+          }
+          parentNode.subMenus.push(temp[i]);
+          parentNode.children.push(temp[i]);
+        } else {
+          // 无父级
+          temp[i].parentId===0 && menuData.push(temp[i]);
+        }
+      }
+      this.setState({
+        menuTree: menuData,
+        autoExpandParent: true
+      })
     })
   };
   // 静态方法 getDerivedStateFromProps  更新父组件传递过来的数据 return出去的是更新state 当state发生改变就会调用次函数
   static getDerivedStateFromProps(props, state){
     let {menuVos}=props
     if(menuVos.length && state.menuTree.length){
-      let choicedKeys = menuVos.map(item=>{
-        return `${item.parentId}-${item.id}`
+      let choicedKeys=[]
+      menuVos.forEach(item => {
+        let menuItem=state.menuTree.filter(data => data.id === item.parentId)
+        if(menuItem.length && menuItem[0].subMenus.some(data=>data.id === item.id)){
+          choicedKeys.push(`${item.parentId}-${item.id}`)
+        }
       })
-      return {expandedKeys: choicedKeys, checkedKeys: choicedKeys}
+      return { expandedKeys: choicedKeys, checkedKeys: choicedKeys }
     }
     return null
   };
@@ -147,5 +147,12 @@ class MenuTree extends Component {
     );
   }
 }
-
-export default MenuTree;
+const mapStatesToProps= (state) => ({
+  state
+})
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getMenuData : () => dispatch(changeMenuListAsync())
+  }
+}
+export default connect(mapStatesToProps, mapDispatchToProps)(MenuTree);

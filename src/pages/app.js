@@ -99,7 +99,7 @@ class HegLayout extends Component {
                         </Breadcrumb.Item>
                 })}
               </Breadcrumb>
-              <Content style={{minHeight: 280}}>
+              <Content style={{flex: 'unset'}}>
                 {this.props.children}
               </Content>
             </Layout>
