@@ -7,9 +7,10 @@ module.exports = {
   },
   getCookie: function (name){
     var arr, reg=new RegExp('(^| )'+name+'=([^;]*)(;|$)');
-    if(arr=document.cookie.match(reg))
-    return unescape(arr[2]);
-    else
+    if(document.cookie.match(reg)){
+      arr=document.cookie.match(reg)
+      return unescape(arr[2]);
+    } 
     return null;
   },
   delCookie: function (name){

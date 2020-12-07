@@ -6,8 +6,20 @@ import { setCookie } from "@/utils/cookieUtil";
 import { Form, Input, Button } from 'antd';
 require('./login.scss')
 export default class Login extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      loading: false
+    }
+  }
   onFinish = values => {
+    this.setState({
+      loading: true
+    })
     axios.post(loginModule.loginPath,values).then(res=>{
+      this.setState({
+        loading: false
+      })
       if(res.code===200){
         const { token, username } = res.data;
         localStorage.setItem("token", token);
@@ -16,6 +28,9 @@ export default class Login extends Component {
         this.props.history.push('/dashboard')
       }
     }).catch(err=>{
+      this.setState({
+        loading: false
+      })
       console.log(err)
     })
   };
@@ -33,7 +48,7 @@ export default class Login extends Component {
               <Input type="password" placeholder="Password"/>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" block htmlType="submit" className="login-form-button">
+              <Button type="primary" block htmlType="submit" className="login-form-button" loading={this.state.loading}>
                 Log in
               </Button>
             </Form.Item>

@@ -14,6 +14,8 @@ export default function CreateRegistered(props){
       if(res.code===200){
         message.success('添加成功')
         history.go(-1)
+      }else {
+        console.log(res)
       }
     }).catch(err=>{
       console.log(err)
@@ -42,7 +44,10 @@ export default function CreateRegistered(props){
           {...formItemLayout}
           name="email"
           label="E-mail"
-          rules={[{ required: true, message: 'Please input your E-mail!' }]}
+          rules={[
+            { required: true, message: 'Please input your E-mail!' },
+            { pattern: /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,6}$/,
+              message: 'Please enter a valid E-mail'}]}
         >
           <Input />
         </Form.Item>

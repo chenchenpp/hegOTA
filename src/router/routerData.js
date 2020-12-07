@@ -1,4 +1,5 @@
 import {permissionRouteData} from './permission.js'
+import {memberUserData} from './memberUser.js'
 const routes = [
   {
     path: '/dashboard',
@@ -15,7 +16,18 @@ const routes = [
     name: 'fareRegistered',
     component: './pages/fareRegistered/create',
     auth: false
+  },{
+    path: '/sendMarketingSms',
+    name: 'sendMarketingSms',
+    component: './pages/sendMarketingSms/list',
+    auth: false
+  },{
+    path: '/sendMarketingSms/create',
+    name: 'sendSmsCreate',
+    component: './pages/sendMarketingSms/create',
+    auth: false
   },
-  ...permissionRouteData
+  ...permissionRouteData,
+  ...memberUserData
 ]
 export default routes

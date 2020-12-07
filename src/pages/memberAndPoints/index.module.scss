@@ -1,0 +1,19 @@
+.flex{
+  display: flex;
+}
+.cursor_poi{
+  cursor: pointer;
+}
+.product-title{
+  font-weight: bold;
+  flex: 1;
+}
+.product_remove{
+  cursor: pointer;
+  color: red;
+}
+.three_field{
+  display: inline-block;
+  width: calc(30% - 8px);
+  margin-right: 8px
+}
