@@ -7,6 +7,7 @@ let HegLayout = lazy(() => import("./pages/app"));
 export default class HegRoute extends Component{
   routerMapHandle= ()=> {
     return routes.map((item, index) => {
+      // 注意：lazy目前只支持默认导出并且要和Suspense组件使用
       const DynamicComponent= lazy(() => import(`${item.component}`))
       return <Route exact path={item.path} key={index} component={DynamicComponent}></Route>
     })
