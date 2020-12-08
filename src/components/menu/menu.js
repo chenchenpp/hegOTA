@@ -10,6 +10,9 @@ export default class HegMenu extends Component {
       openKeys: []
     }
   }
+  componentDidMount (){
+    this.findMenuKeys(this.props.menuList)
+  }
   // 选择菜单项
   goPageHandle=(data) => {
     // 更新菜单展开选中状态
@@ -48,12 +51,7 @@ export default class HegMenu extends Component {
       }
     }
   }
-  // 监听菜单变化
-  componentDidUpdate(preProps, perState){
-    if(preProps.menuList.length!==this.props.menuList.length){
-      this.findMenuKeys(this.props.menuList)
-    }
-  }
+ 
   render(){
     return (
       <Menu
