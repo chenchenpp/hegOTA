@@ -13,7 +13,12 @@
       "es6"
     ], // 编译过程中需要引入的库文件的列表。
     "skipLibCheck": true, //忽略所有库中的声明文件（ *.d.ts）的类型检查。
-    "jsx": "react" // 在 .tsx文件里支持JSX
+    "jsx": "react", // 在 .tsx文件里支持JSX
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"], //不配置的话alias配置的@不生效  不成功则重新启动vscode 真踏马的坑
+    },
+    "allowJs": true,
   },
   "include": [
     "./src/**/*", // 这个表示处理根目录的src目录下所有的.ts和.tsx文件，并不是所有文件
