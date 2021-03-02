@@ -28,7 +28,12 @@ export const memberUserPath={
   expirarion: addBaseUrl('/memberAndPoints/expiration'),
   commodity: addBaseUrl('/memberAndPoints/commodity')
 }
-export let otherPath={
+export const activityPath = {
+  orderSharingActivity: addBaseUrl('/activity/orderSharingActivity')
+}
+export let otherPath = {
   farRegistered: addBaseUrl('/fare/registered'),
- 
+  flightCache: addBaseUrl('/flight/cache'),
+  vipOrderManage: addBaseUrl('/vipOrder/vipOrderManagement'),
+  vipDownExcel: addBaseUrl('/vipOrder/vipOrderManagement/downLoad')
 }

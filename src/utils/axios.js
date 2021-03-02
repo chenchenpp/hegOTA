@@ -1,5 +1,12 @@
 import axios from 'axios';
 import { message } from 'antd';
+axios.interceptors.request.use(config => {
+  let token=localStorage.getItem("token")
+  if(token){
+    config.headers.Authorization=token
+  }
+  return config
+})
 // 响应拦截器
 axios.interceptors.response.use(
   res => {

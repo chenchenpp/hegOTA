@@ -1,5 +1,6 @@
 import {permissionRouteData} from './permission.js'
 import {memberUserData} from './memberUser.js'
+import {activityRoute} from './activity'
 const routes = [
   {
     path: '/dashboard',
@@ -26,8 +27,19 @@ const routes = [
     name: 'sendSmsCreate',
     component: './pages/sendMarketingSms/create',
     auth: false
+  },{
+    path: '/flight/cache',
+    name: 'flightCache',
+    component: './pages/flightCache/list',
+    auth: false
+  },{
+    path: '/vipOrder/vipOrderManagement',
+    name: 'vipOrderList',
+    component: './pages/vipOrder/list',
+    auth: false
   },
   ...permissionRouteData,
-  ...memberUserData
+  ...memberUserData,
+  ...activityRoute
 ]
 export default routes

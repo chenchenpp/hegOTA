@@ -30,7 +30,7 @@ export default class Login extends Component {
     }).catch(err=>{
       this.setState({
         loading: false
-      })
+      })  
       console.log(err)
     })
   };

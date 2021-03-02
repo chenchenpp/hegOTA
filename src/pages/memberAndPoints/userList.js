@@ -55,7 +55,7 @@ export default function UserList(props){
     }
     setPageParams(newPage)
   }
-  const searchMemberHandl=(record)=>{
+  const searchMemberHandle=(record)=>{
     setPageParams({...record,...pageParams})
   }
   const onReset=()=>{
@@ -90,7 +90,7 @@ export default function UserList(props){
   return (
     <>
       <Card style={{marginBottom: '10px'}}>
-        <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} onFinish={searchMemberHandl} ref={formRef}>
+        <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} onFinish={searchMemberHandle} ref={formRef}>
           <Row>
             <Col span={8}>
               <Form.Item label="User Id" name="userId">
